@@ -1,0 +1,3 @@
+Milestone 1
+1. Decide which framework will be suitable for our project.
+2. Make at least one social media sharer.
