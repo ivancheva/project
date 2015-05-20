@@ -1,10 +1,33 @@
 class User < ActiveRecord::Base
-	has_many :authorizations
-validates :name, :email, :presence => true
-def add_provider(auth_hash)
-  # Check if the provider already exists, so we don't add it twice
-  unless authorizations.find_by_provider_and_uid(auth_hash["provider"], auth_hash["uid"])
-    Authorization.create :user => self, :provider => auth_hash["provider"], :uid => auth_hash["uid"]
+  @message="Posting on my wall"
+  def self.koala(auth)
+  	
+	access_token = auth['token']
+	facebook = Koala::Facebook::API.new(access_token)
+	facebook.get_object("me?fields=name,picture")
+	facebook.put_wall_post(@message)
+	#facebook.put_connections("me", "feed", :message => "#{@message}")
   end
-end
+
+  def self.from_omniauth(auth)
+    where(auth.slice(:provider, :uid)).first_or_initialize.tap do |user|
+      user.provider = auth.provider
+      user.uid = auth.uid
+      user.name = auth.info.name
+      user.oauth_token = auth.credentials.token
+      user.oauth_secret = auth.credentials.secret
+      user.save!
+    end
+  end
+
+  def tweet(tweet)
+    client = Twitter::REST::Client.new do |config|
+      config.consumer_key        = Rails.application.config.twitter_key
+      config.consumer_secret     = Rails.application.config.twitter_secret
+      config.access_token        = oauth_token
+      config.access_token_secret = oauth_secret
+    end
+    
+    client.update(tweet)
+  end
 end

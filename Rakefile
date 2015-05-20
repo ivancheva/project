@@ -3,4 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Rails.application.load_tasks
+TwitterExample::Application.load_tasks
