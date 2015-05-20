@@ -1,0 +1,17 @@
+<%= link_to "Facebook Login", '/auth/facebook' %> 
+<%= link_to "Twitter Login", '/auth/twitter' %> 
+<%= link_to "Import Linkedin", "/linkedin/auth" %>
+<%= link_to "Instagram", "/instagram/index" %>
+
+    <div>
+      <% if current_user %>
+        Signed in as <strong><%= current_user.name %></strong>!
+        <%= link_to "Sign out", signout_path, id: "sign_out" %>
+      <% else %>
+        <%= link_to "Sign in with Twitter", "/auth/twitter", id: "sign_in" %>
+      <% end %>
+	<%= link_to "Facebook Login", '/auth/facebook' %> 
+	<%= link_to "Import Linkedin", "/linkedin/auth" %>
+	<%= link_to "Instagram", "/instagram/index" %>
+
+    </div>
